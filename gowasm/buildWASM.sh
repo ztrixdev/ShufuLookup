@@ -1,0 +1,1 @@
+GOOS=js GOARCH=wasm go build -o shufulookup.wasm main.go
