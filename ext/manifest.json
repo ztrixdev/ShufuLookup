@@ -1,0 +1,17 @@
+{
+    "name": "ShufuLookup",
+    "description": "A browser extension allowing you to look up Chinese words and their meanings in dictionaries and add them to your flashcards.",
+    "version": "0.1",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "permissions": ["https://www.mdbg.net/*", "storage"],
+    "host_permissions": [
+        "https://www.mdbg.net/*"
+    ],
+    "content_security_policy": {
+        "extension_pages": 
+            "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'; connect-src 'self' https://www.mdbg.net"
+    }
+}

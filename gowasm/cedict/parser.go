@@ -8,8 +8,9 @@ import (
 	"strings"
 )
 
-func parseLine(line string) (*CEDICTEntry, error) {
+func parseLine(id int, line string) (*CEDICTEntry, error) {
 	var new CEDICTEntry
+	new.Id = id
 
 	list := strings.Fields(line)
 	listlen := len(list)
@@ -64,6 +65,7 @@ func ParseDict(raw string) []CEDICTEntry {
 
 	slice := []CEDICTEntry{}
 
+	entryId := 0
 	// parsing line by line
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -75,9 +77,10 @@ func ParseDict(raw string) []CEDICTEntry {
 			continue // ignoring comments
 		}
 
-		parsed, err := parseLine(line)
+		parsed, err := parseLine(entryId, line)
 		if err == nil { // ignoring the line if parsing failed
 			slice = append(slice, *parsed)
+			entryId++
 		}
 	}
 

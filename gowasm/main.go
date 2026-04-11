@@ -16,5 +16,6 @@ func parseCEDICTfile(this js.Value, args []js.Value) interface{} {
 
 func main() {
 	js.Global().Set("parseCEDICTfile", js.FuncOf(parseCEDICTfile))
+
 	select {}
 }
