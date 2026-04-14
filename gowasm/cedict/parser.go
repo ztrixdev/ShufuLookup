@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -29,17 +30,16 @@ func parseLine(id int, line string) (*CEDICTEntry, error) {
 	pinyinStop := 2
 	pinyin := ""
 	for idx := 2; idx < listlen; idx++ {
-		if list[idx][0] == '[' {
-			pinyin += list[idx][1:]
-		} else if list[idx][len(list[idx])-1] == ']' {
-			pinyin += " " + list[idx][0:len(list[idx])-1]
+		token := list[idx]
+		cleaned := strings.Trim(token, "[]")
+		pinyin += " " + cleaned
+		if strings.Contains(token, "]") {
 			pinyinStop = idx
 			break
-		} else {
-			pinyin += " " + list[idx]
 		}
 	}
-	new.Pinyin = strings.TrimSpace(pinyin)
+
+	new.Pinyin = ConvertPinyin(strings.TrimSpace(pinyin))
 
 	// definitions start with a / and end with a /
 	// E.g /hello (loanword)/ for 哈囉
@@ -54,7 +54,7 @@ func parseLine(id int, line string) (*CEDICTEntry, error) {
 			definitions += " " + list[idx]
 		}
 	}
-	new.Definition = strings.TrimSpace(definitions)
+	new.Definitions = slices.Concat(new.Definitions, strings.Split(strings.TrimSpace(definitions), "/"))
 
 	return &new, nil
 }

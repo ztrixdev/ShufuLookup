@@ -1,11 +1,43 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-    </head>
-    <body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
 
-        <script src="wasm_exec.js"></script>
-        <script type="module" src="js/popup.js "></script>
-    </body>
+  <div class="container-xl py-5" style="width: 400px;">
+    <h1 class="text-center mb-4">舒服Lookup</h1>
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-6">
+        <div class="input-group shadow-sm">
+          <input type="text" id="charinput" class="form-control" placeholder="Search character...">
+          <button class="btn btn-primary" id="searchBtn">Search</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-body text-center">
+            <h1 class="display-3" id="chars">你</h1>
+
+            <h4 class="text-muted mb-3" id="pinyin">nǐ</h4>
+
+            <ul id="deflist" class="list-group list-group-flush text-start">
+              <li id="def" class="list-group-item">you (singular)</li>
+            </ul>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script src="js/wasm_exec.js"></script>
+  <script type="module" src="js/popup.js"></script>
+</body>
 </html>
