@@ -6,4 +6,5 @@ type CEDICTEntry struct {
 	Simplified  string   `json:"simple"`
 	Pinyin      string   `json:"pinyin"`
 	Definitions []string `json:"defs"`
+	Classifiers []string `json:"cl"`
 }

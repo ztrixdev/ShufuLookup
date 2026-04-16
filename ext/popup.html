@@ -2,42 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=0.5">
+  <link href="css/bulma.min.css" rel="stylesheet">
 </head>
-<body class="bg-light">
-
-  <div class="container-xl py-5" style="width: 400px;">
-    <h1 class="text-center mb-4">舒服Lookup</h1>
-    <div class="row justify-content-center mb-4">
-      <div class="col-md-6">
-        <div class="input-group shadow-sm">
-          <input type="text" id="charinput" class="form-control" placeholder="Search character...">
-          <button class="btn btn-primary" id="searchBtn">Search</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <div class="card shadow-sm">
-          <div class="card-body text-center">
-            <h1 class="display-3" id="chars">你</h1>
-
-            <h4 class="text-muted mb-3" id="pinyin">nǐ</h4>
-
-            <ul id="deflist" class="list-group list-group-flush text-start">
-              <li id="def" class="list-group-item">you (singular)</li>
-            </ul>
-
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-  </div>
+<body style="width: fit-content; padding: 5%;">
+    <div class="container" id="mainbody"></div>
+    <aside class="menu column is-2">
+      <ul class="menu-list">
+        <li><a id="dictbtn">Dictionary</a></li>
+        <li><a id="settingsbtn">Settings</a></li>
+      </ul>
+    </aside>
+    <footer>
+      <center>
+        <h2 class="title is-5">舒服Lookup</h2>
+        <p class="subtitle is-6">made with 愛情 by ztrix <3 </p>
+        <p><a href="https://github.com/ztrixdev/ShufuLookup" target="_blank">GitHub</a></p>
+      </center>
+    </footer>
   <script src="js/wasm_exec.js"></script>
-  <script type="module" src="js/popup.js"></script>
+  <script type="module" src="js/popup/popup.js"></script>
 </body>
 </html>

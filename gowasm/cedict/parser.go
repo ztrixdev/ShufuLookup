@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"regexp"
 	"slices"
 	"strings"
 )
@@ -54,7 +55,22 @@ func parseLine(id int, line string) (*CEDICTEntry, error) {
 			definitions += " " + list[idx]
 		}
 	}
-	new.Definitions = slices.Concat(new.Definitions, strings.Split(strings.TrimSpace(definitions), "/"))
+
+	defarr := strings.Split(strings.TrimSpace(definitions), "/")
+	if defarr[len(defarr)-1] == "" { // trims a dead element that sometimes occurs after splitting
+		defarr = defarr[0 : len(defarr)-1]
+	}
+
+	if strings.HasPrefix(defarr[len(defarr)-1], "CL:") { // turns CL:棵[ke1],撮[zuo3],株[zhu1],根[gen1] into [棵, 撮, 株, 根], if present
+		re := regexp.MustCompile(`\[[^\]]*\]`)
+		clean := re.ReplaceAllString(defarr[len(defarr)-1][3:], "")
+		classifiers := strings.Split(clean, ",")
+
+		new.Classifiers = classifiers
+		defarr = defarr[0 : len(defarr)-1]
+	}
+
+	new.Definitions = slices.Concat(new.Definitions, defarr)
 
 	return &new, nil
 }
