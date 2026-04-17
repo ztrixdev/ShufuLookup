@@ -61,15 +61,27 @@ func parseLine(id int, line string) (*CEDICTEntry, error) {
 		defarr = defarr[0 : len(defarr)-1]
 	}
 
-	if strings.HasPrefix(defarr[len(defarr)-1], "CL:") { // turns CL:棵[ke1],撮[zuo3],株[zhu1],根[gen1] into [棵, 撮, 株, 根], if present
-		re := regexp.MustCompile(`\[[^\]]*\]`)
-		clean := re.ReplaceAllString(defarr[len(defarr)-1][3:], "")
-		classifiers := strings.Split(clean, ",")
-
-		new.Classifiers = classifiers
-		defarr = defarr[0 : len(defarr)-1]
+	// removes classifiers from definitions and puts them into new.Classifiers
+	re := regexp.MustCompile(`\[[^\]]*\]`)
+	var classifiers []string
+	var cleanedDefs []string
+	for _, def := range defarr {
+		if strings.HasPrefix(def, "CL:") {
+			clean := re.ReplaceAllString(def[3:], "")
+			cls := strings.SplitSeq(clean, ",")
+			for w := range cls {
+				w = strings.TrimSpace(w)
+				if w != "" {
+					classifiers = append(classifiers, w)
+				}
+			}
+		} else {
+			cleanedDefs = append(cleanedDefs, def)
+		}
 	}
 
+	new.Classifiers = classifiers
+	defarr = cleanedDefs
 	new.Definitions = slices.Concat(new.Definitions, defarr)
 
 	return &new, nil

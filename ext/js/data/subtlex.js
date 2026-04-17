@@ -1,27 +1,23 @@
-import { db } from "./db.js"
 import { fetchFile } from "./fetcher.js"
+import { db } from "./db.js"
 
-export class CEDICT {
-  constructor(parser) {
+export class SUBTLEX {
+ constructor(parser) {
     if (!parser) {
-      throw new Error("CEDICT: parser is required. Use parseCEDICTfile function from Go as a parser.")
+      throw new Error("SUBTLEX: parser is required. Use parseSUBTLEXfile function from Go as a parser.")
     }
 
     this.parser = parser
 
     this.link =
-      "js/extra/cedict_1_0_ts_utf-8_mdbg.txt.gz" 
+      "js/extra/SBTLX-CH-WF" 
 
     this.cache = null
   }
 
   async dl() {
     const res = await fetchFile(chrome.runtime.getURL(this.link))
-    const stream = res.body.pipeThrough(
-      new DecompressionStream("gzip")
-    )
-
-    return await new Response(stream).text()
+    return await res.text()
   }
 
   async parse(raw) {
@@ -31,8 +27,8 @@ export class CEDICT {
   }
 
   async store(parsed) {
-    await db.dict.clear()
-    await db.dict.bulkPut(parsed)
+    await db.subtlex.clear()
+    await db.subtlex.bulkPut(parsed)
 
     this.cache = parsed
   }
@@ -42,10 +38,10 @@ export class CEDICT {
     if (this.cache) return this.cache
 
     // 2. trying to access IndexedDB cache
-    const count = await db.dict.count()
+    const count = await db.subtlex.count()
 
     if (count > 0) {
-      const data = await db.dict.toArray()
+      const data = await db.subtlex.toArray()
       this.cache = data
       return data
     }
@@ -58,16 +54,4 @@ export class CEDICT {
 
     return parsed
   }
-}
-
-export async function getWordSets() {
-  const simples = new Set()
-  const trads = new Set()
-
-  await db.dict.each(row => {
-    simples.add(row.simple)
-    trads.add(row.trad)
-  })
-
-  return { simples, trads }
 }

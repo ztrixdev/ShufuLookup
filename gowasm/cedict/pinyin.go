@@ -33,7 +33,7 @@ func convertSyllable(s string) string {
 	// find tone number (last char)
 	last := s[len(s)-1]
 	if last < '1' || last > '4' {
-		return s // no tone
+		return s[0 : len(s)-1] // no tone
 	}
 
 	tone := int(last - '0')
