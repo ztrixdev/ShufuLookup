@@ -1,0 +1,165 @@
+:root {
+  --text: #e6e6e6;
+  --muted: #9aa4b2;
+
+  --accent: #ff8a4a;
+  --accent-hover: #ff6f2d;
+  --highlight: #ff8a4a;
+}
+
+.engsearch-results-box {
+  height: 320px;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid #232838;
+  border-radius: 10px;
+}
+
+.engsearch-results-list {
+  height: 100%;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.engsearch-result-item {
+  padding: 10px 8px;
+  border-bottom: 1px solid #232838;
+}
+
+.engsearch-result-main {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.engsearch-chars {
+  font-size: 1.1rem;
+}
+
+.engsearch-pinyin {
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-family: monospace;
+}
+
+.engsearch-result-def {
+  padding-left: 20px !important;
+  margin-top: 4px;
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.3;
+}
+
+.link {
+  display: inline-flex;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.shufu-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.shufu-link:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.shufu-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: inline-block;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  z-index: 2000;
+  background-color: #2a2f3a;
+  transition: .2s;
+  border-radius: 999px;
+  border: 1px solid #232838;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  top: 3px;
+  background-color: #fff;
+  transition: .2s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--highlight);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+.split-layout {
+  display: flex;
+  width: 100%;
+  gap: 10px;
+}
+
+.left-pane,
+.right-pane {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.left-pane .box {
+  width: 80%;
+  border: 1px solid #232838;
+  border-radius: 10px;
+}
+
+.footer-box {
+  text-align: center;
+  color: var(--muted);
+}
+
+#notfound {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: #e08638;
+  color: #eaeaea;
+    z-index: 1000;
+  padding: 10px 14px;
+  border-radius: 8px;
+  opacity: 0;
+  transition: all 0.25s ease;
+}
+
+#notfound.show {
+  opacity: 1;
+  transform: translateY(0);
+}

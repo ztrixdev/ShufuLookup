@@ -4,24 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=0.5">
   <link href="css/libs/bulma.min.css" rel="stylesheet">
-  <link href="css/englishsearch.css" rel="stylesheet">
+  <link href="css/popup.css" rel="stylesheet">
 </head>
 <body style="width: 500px ; padding: 5%;">
-    <div class="container" id="mainbody"></div>
-    <aside class="menu column is-2">
-      <ul class="menu-list">
-        <li><a id="dictbtn">Dictionary</a></li>
-        <li><a id="settingsbtn">Settings</a></li>
-      </ul>
-    </aside>
-    <footer>
-      <center>
-        <h2 class="title is-5">舒服Lookup</h2>
-        <p class="subtitle is-6">made with 愛情 by ztrix <3 </p>
-        <p><a href="https://github.com/ztrixdev/ShufuLookup" target="_blank">GitHub</a></p>
-      </center>
-    </footer>
-  <script src="js/extra/wasm_exec.js"></script>
+  <div class="notification is-primary" id="notfound">
+    Couldn't find what you're looking for.<br>
+    Take a look at today's Word of the Day!
+  </div>
+  <div class="container" id="mainbody">
+  </div>
+  <br>
+  <div class="split-layout">
+    <div class="left-pane">
+      <div>
+        <div class="toggle-row">
+          <span class="lang-tag">简体</span>
+          <label class="switch">
+            <input id="writingToggle" type="checkbox">
+            <span class="slider"></span>
+          </label>
+          <span class="lang-tag">繁體</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-pane">
+      <footer class="footer-box">
+            <a class="shufu-link" href="https://github.com/ztrixdev/ShufuLookup" target="_blank">
+              <img class="shufu-icon" src="icon.png" alt="icon">
+              舒服Lookup
+            </a>
+        <p class="subtitle is-6">made with 愛情 by ztrix &lt;3</p>
+      </footer>
+    </div>
+  </div>
+  <script src="js/libs/wasm_exec.js"></script>
   <script type="module" src="js/popup/popup.js"></script>
 </body>
 </html>

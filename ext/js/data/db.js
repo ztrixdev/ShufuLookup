@@ -1,4 +1,4 @@
-import Dexie from "../extra/dexie.mjs"
+import Dexie from "../libs/dexie.mjs"
 
 export const db = new Dexie("ShufuLookupDB")
 

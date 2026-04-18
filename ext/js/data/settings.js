@@ -1,28 +1,30 @@
 export class Settings {
-    async setDefault() {
-        await chrome.storage.local.set({
+    setDefault() {
+        chrome.storage.local.set({
             cedict: "bundled",
             prefWriting: "simplified"
         })
     }
 
-    async switchPrefWriting() {
-        chrome.storage.local.get(["prefWriting"], async (result) => {
-            if (result == "traditional") {
-                await chrome.storage.local.set({
+    switchPrefWriting() {
+        chrome.storage.local.get(["prefWriting"], (result) => {
+            if (result.prefWriting == "traditional") {
+                chrome.storage.local.set({
                     prefWriting: "simplified"
                 })
             } else {
-                await chrome.storage.local.set({
+                chrome.storage.local.set({
                     prefWriting: "traditional"
                 })
             }
         })
     }
 
-    async getPrefWriting() {
-        chrome.storage.local.get(["prefWriting"], (result) => {
-            return result
+    getPrefWriting() {
+        return new Promise((resolve) => {
+            chrome.storage.local.get(["prefWriting"], (result) => {
+            resolve(result.prefWriting)
+            })
         })
     }
 

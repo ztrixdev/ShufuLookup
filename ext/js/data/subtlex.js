@@ -10,7 +10,7 @@ export class SUBTLEX {
     this.parser = parser
 
     this.link =
-      "js/extra/SBTLX-CH-WF" 
+      "js/extra/raw/SBTLX-CH-WF" 
 
     this.cache = null
   }
@@ -30,7 +30,15 @@ export class SUBTLEX {
     await db.subtlex.clear()
     await db.subtlex.bulkPut(parsed)
 
-    this.cache = parsed
+    this.cache = {
+      byWord: new Map()
+    }
+    
+    for (const row of parsed) {
+      this.cache.byWord.set(row.word, row)
+    }
+
+    return this.cache
   }
 
   async load() {
@@ -42,8 +50,15 @@ export class SUBTLEX {
 
     if (count > 0) {
       const data = await db.subtlex.toArray()
-      this.cache = data
-      return data
+      this.cache = {
+        byWord: new Map()
+      }
+      
+      for (const row of data) {
+        this.cache.byWord.set(row.word, row)
+      }
+
+      return this.cache
     }
 
     // 3. nothing stored locally, so we're downloadin 
@@ -55,3 +70,35 @@ export class SUBTLEX {
     return parsed
   }
 }
+
+var subtlexInstance = null
+var subtlexPromise = null
+
+export function getSUBTLEX() {
+  if (subtlexInstance) return Promise.resolve(subtlexInstance)
+
+  if (!subtlexPromise) {
+    subtlexPromise = initSUBTLEX()
+  }
+
+  return subtlexPromise
+}
+
+async function initSUBTLEX() {
+  const go = new Go()
+
+  const result = await WebAssembly.instantiateStreaming(
+    fetch("../../shufulookup.wasm"),
+    go.importObject
+  )
+
+  go.run(result.instance)
+
+  const subtlex = new SUBTLEX(parseSUBTLEXfile)
+  await subtlex.load()
+
+  subtlexInstance = subtlex
+  return subtlex
+}
+
+

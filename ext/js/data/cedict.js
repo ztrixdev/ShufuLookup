@@ -1,6 +1,7 @@
 import { db } from "./db.js"
 import { fetchFile } from "./fetcher.js"
 
+
 export class CEDICT {
   constructor(parser) {
     if (!parser) {
@@ -10,7 +11,7 @@ export class CEDICT {
     this.parser = parser
 
     this.link =
-      "js/extra/cedict_1_0_ts_utf-8_mdbg.txt.gz" 
+      "js/extra/raw/cedict_1_0_ts_utf-8_mdbg.txt.gz" 
 
     this.cache = null
   }
@@ -34,7 +35,17 @@ export class CEDICT {
     await db.dict.clear()
     await db.dict.bulkPut(parsed)
 
-    this.cache = parsed
+    this.cache = {
+      bySimple: new Map(),
+      byTrad: new Map()
+    }
+
+    for (const row of parsed) {
+      this.cache.bySimple.set(row.simple, row)
+      this.cache.byTrad.set(row.trad, row)
+    }
+
+    return this.cache
   }
 
   async load() {
@@ -46,8 +57,17 @@ export class CEDICT {
 
     if (count > 0) {
       const data = await db.dict.toArray()
-      this.cache = data
-      return data
+      this.cache = {
+        bySimple: new Map(),
+        byTrad: new Map()
+      }
+
+      for (const row of data) {
+        this.cache.bySimple.set(row.simple, row)
+        this.cache.byTrad.set(row.trad, row)
+      }
+
+      return this.cache
     }
 
     // 3. nothing stored locally, so we're downloadin 
@@ -60,14 +80,32 @@ export class CEDICT {
   }
 }
 
-export async function getWordSets() {
-  const simples = new Set()
-  const trads = new Set()
+var cedictInstance = null
+var cedictPromise = null
 
-  await db.dict.each(row => {
-    simples.add(row.simple)
-    trads.add(row.trad)
-  })
+export function getCEDICT() {
+  if (cedictInstance) return Promise.resolve(cedictInstance)
 
-  return { simples, trads }
+  if (!cedictPromise) {
+    cedictPromise = initCEDICT()
+  }
+
+  return cedictPromise
+}
+
+async function initCEDICT() {
+  const go = new Go()
+
+  const result = await WebAssembly.instantiateStreaming(
+    fetch("../../shufulookup.wasm"),
+    go.importObject
+  )
+
+  go.run(result.instance)
+
+  const dict = new CEDICT(parseCEDICTfile)
+  await dict.load()
+
+  cedictInstance = dict
+  return dict
 }

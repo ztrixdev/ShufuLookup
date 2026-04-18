@@ -23,17 +23,22 @@ export function showEngSearchResults(results, prefWriting) {
 
         const a = document.createElement("a")
         a.href = "#"
+        a.className = "link"
 
-        const chars = prefWriting === "simplified"
-                ? `${res.simple} (${res.trad})`
-                : `${res.trad} (${res.simple})`
+        var chars = ""
+        if (res.trad == res.simple) {
+            chars = res.simple
+        } else if (prefWriting === "simplified") {
+            chars = `${res.simple} (${res.trad})`
+        } else {
+            chars = `${res.trad} (${res.simple})`
+        } 
 
         a.textContent = chars
 
         a.addEventListener("click", (e) => {
             e.preventDefault()
-            document.getElementById("charinput").value = res.simple
-            search()
+            search(res.simple)
         })
 
         charsSpan.appendChild(a)
@@ -47,7 +52,7 @@ export function showEngSearchResults(results, prefWriting) {
 
         const def = document.createElement("div")
         def.className = "engsearch-result-def has-text-white"
-        def.textContent = res.defs.join(" ")
+        def.textContent = res.defs.join("; ")
 
         item.appendChild(main)
         item.appendChild(def)
@@ -107,29 +112,29 @@ export function showSingularWordResults(data) {
 }
 
 function renderCL(clList, container) {
-    container.innerHTML = "";
+    container.innerHTML = ""
 
-    if (!clList || clList.length === 0) return;
+    if (!clList || clList.length === 0) return
 
-    const label = document.createElement("span");
-    label.textContent = "CL: ";
-    container.appendChild(label);
+    const label = document.createElement("span")
+    label.textContent = "CL: "
+    container.appendChild(label)
 
     clList.forEach((cl, i) => {
-        const a = document.createElement("a");
-        a.href = "#";
-        a.textContent = cl;
+        const a = document.createElement("a")
+        a.href = "#"
+        a.className = "link"
+        a.textContent = cl
 
         a.addEventListener("click", (e) => {
-            e.preventDefault();
-            document.getElementById("charinput").value = cl;
-            search();
-        });
+            e.preventDefault()
+            search(cl)
+        })
 
-        container.appendChild(a);
+        container.appendChild(a)
 
         if (i < clList.length - 1) {
-            container.appendChild(document.createTextNode(", "));
+            container.appendChild(document.createTextNode(", "))
         }
-    });
+    })
 }
